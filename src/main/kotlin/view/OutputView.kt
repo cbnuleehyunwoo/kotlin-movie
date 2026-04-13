@@ -60,7 +60,7 @@ object OutputView {
     fun selectPaymentType() {
         println("결제 수단을 선택하세요:")
         println("1) 신용카드(5% 할인)")
-        println("2) 현금(2% 할인")
+        println("2) 현금(2% 할인)")
     }
 
     fun decideToPayPrompt(totalPrice: Money) {
@@ -109,7 +109,7 @@ object OutputView {
             val rowLine =
                 rowSeats
                     .sortedBy { it.position.column.value }
-                    .joinToString("") { " [${it.grade.name}]" }
+                    .joinToString("") { " [ ${it.grade.name}]" }
             println("$row$rowLine")
         }
     }
