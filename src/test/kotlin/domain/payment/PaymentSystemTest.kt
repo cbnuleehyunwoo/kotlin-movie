@@ -31,214 +31,75 @@ import java.time.LocalTime
 
 class PaymentSystemTest {
 
+    private val paymentSystem = PaymentSystem(
+        ticketDiscountStrategy = ticketDiscountPolicy,
+        totalDiscountStrategy = totalDiscountPolicy
+    )
+
     @Test
     fun `무비데이, 시간 할인, 포인트 차감, 결제 수단 할인이 올바른 순서로 적용된다`() {
-        val paymentSystem = PaymentSystem(
-            ticketDiscountStrategy = ticketDiscountPolicy,
-            totalDiscountStrategy = totalDiscountPolicy
+        val result = paymentSystem.calculate(
+            point = Point(5_000),
+            payment = PaymentType.CREDIT_CARD,
+            ticketBucket = TicketBucket(listOf(createTicket(), createTicket())),
         )
-        val result =
-            paymentSystem.calculate(
-                point = Point(5_000),
-                payment = PaymentType.CREDIT_CARD,
-                ticketBucket =
-                    TicketBucket(
-                        tickets =
-                            listOf(
-                                Ticket(
-                                    screening =
-                                        Screening(
-                                            movie =
-                                                Movie(
-                                                    title = Title("허닛"),
-                                                    runningTime = RunningTime(167),
-                                                    screeningPeriod =
-                                                        ScreeningPeriod(
-                                                            startDate = LocalDate.of(2026, 4, 8),
-                                                            endDate = LocalDate.of(2026, 4, 9),
-                                                        ),
-                                                ),
-                                            room =
-                                                ScreeningRoom(
-                                                    name = ScreeningRoomName("커피"),
-                                                    operatingTime =
-                                                        TimeRange(
-                                                            LocalTime.of(10, 0),
-                                                            LocalTime.of(18, 0),
-                                                        ),
-                                                    seats =
-                                                        Seats(
-                                                            listOf(
-                                                                Seat(
-                                                                    position =
-                                                                        SeatPosition(
-                                                                            Row("A"),
-                                                                            Column(1),
-                                                                        ),
-                                                                ),
-                                                            ),
-                                                        ),
-                                                ),
-                                            startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
-                                        ),
-                                    seatPositions =
-                                        SeatPositions(
-                                            listOf(
-                                                SeatPosition(
-                                                    Row("A"),
-                                                    Column(1),
-                                                ),
-                                            ),
-                                        ),
-                                ),
-                                Ticket(
-                                    screening =
-                                        Screening(
-                                            movie =
-                                                Movie(
-                                                    title = Title("허닛"),
-                                                    runningTime = RunningTime(167),
-                                                    screeningPeriod =
-                                                        ScreeningPeriod(
-                                                            startDate = LocalDate.of(2026, 4, 8),
-                                                            endDate = LocalDate.of(2026, 4, 9),
-                                                        ),
-                                                ),
-                                            room =
-                                                ScreeningRoom(
-                                                    name = ScreeningRoomName("커피"),
-                                                    operatingTime =
-                                                        TimeRange(
-                                                            LocalTime.of(10, 0),
-                                                            LocalTime.of(18, 0),
-                                                        ),
-                                                    seats =
-                                                        Seats(
-                                                            listOf(
-                                                                Seat(
-                                                                    position =
-                                                                        SeatPosition(
-                                                                            Row("A"),
-                                                                            Column(1),
-                                                                        ),
-                                                                ),
-                                                            ),
-                                                        ),
-                                                ),
-                                            startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
-                                        ),
-                                    seatPositions =
-                                        SeatPositions(
-                                            listOf(
-                                                SeatPosition(
-                                                    Row("A"),
-                                                    Column(1),
-                                                ),
-                                            ),
-                                        ),
-                                )
-                            ),
-                    ),
-            )
         assertThat(result).isEqualTo(Money(11_970))
     }
 
     @Test
     fun `할인 적용 후 금액이 0보다 작을 경우 예외를 던진다`() {
-        val paymentSystem = PaymentSystem(
-            ticketDiscountStrategy = ticketDiscountPolicy,
-            totalDiscountStrategy = totalDiscountPolicy
-        )
         assertThrows(IllegalArgumentException::class.java) {
             paymentSystem.calculate(
                 point = Point(10001),
                 payment = PaymentType.CREDIT_CARD,
-                ticketBucket =
-                    TicketBucket(
-                        tickets =
-                            listOf(
-                                Ticket(
-                                    screening =
-                                        Screening(
-                                            movie =
-                                                Movie(
-                                                    title = Title("허닛"),
-                                                    runningTime = RunningTime(167),
-                                                    screeningPeriod =
-                                                        ScreeningPeriod(
-                                                            startDate = LocalDate.of(
-                                                                2026,
-                                                                4,
-                                                                8
-                                                            ),
-                                                            endDate = LocalDate.of(
-                                                                2026,
-                                                                4,
-                                                                9
-                                                            ),
-                                                        ),
-                                                ),
-                                            room =
-                                                ScreeningRoom(
-                                                    name = ScreeningRoomName("커피"),
-                                                    operatingTime =
-                                                        TimeRange(
-                                                            LocalTime.of(
-                                                                10,
-                                                                0
-                                                            ),
-                                                            LocalTime.of(
-                                                                18,
-                                                                0
-                                                            ),
-                                                        ),
-                                                    seats =
-                                                        Seats(
-                                                            listOf(
-                                                                Seat(
-                                                                    position =
-                                                                        SeatPosition(
-                                                                            Row("A"),
-                                                                            Column(1),
-                                                                        ),
-                                                                ),
-                                                            ),
-                                                        ),
-                                                ),
-                                            startTime = LocalDateTime.of(
-                                                2026,
-                                                4,
-                                                8,
-                                                10,
-                                                0
-                                            ),
-                                        ),
-                                    seatPositions =
-                                        SeatPositions(
-                                            listOf(
-                                                SeatPosition(
-                                                    Row("A"),
-                                                    Column(1),
-                                                ),
-                                            ),
-                                        ),
-                                ),
-                            ),
-                    ),
+                ticketBucket = TicketBucket(listOf(createTicket())),
             )
         }
     }
-    private val ticketDiscountPolicy = TicketDiscountPolicy(
-        strategies = listOf(
-            MoviedayDiscount(),
-            TimeDiscount(),
-        )
+
+    private fun createTicket() = Ticket(
+        screening = createScreening(),
+        seatPositions = SeatPositions(listOf(SeatPosition(Row("A"), Column(1)))),
     )
 
-    private val totalDiscountPolicy = TotalDiscountPolicy(
-        strategies = listOf(
-            PaymentDiscount(),
-        )
+    private fun createScreening() = Screening(
+        movie = createMovie(),
+        room = createScreeningRoom(),
+        startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
     )
-
+    private fun createScreeningRoom() = ScreeningRoom(
+        name = ScreeningRoomName("커피"),
+        operatingTime = TimeRange(
+            LocalTime.of(10, 0),
+            LocalTime.of(18, 0),
+        ),
+        seats = Seats(
+            listOf(
+                Seat(
+                    position = SeatPosition(Row("A"), Column(1)),
+                ),
+            ),
+        ),
+    )
+    private fun createMovie() = Movie(
+        title = Title("허닛"),
+        runningTime = RunningTime(167),
+        screeningPeriod = ScreeningPeriod(
+            startDate = LocalDate.of(2026, 4, 8),
+            endDate = LocalDate.of(2026, 4, 9),
+        ),
+    )
 }
+
+private val ticketDiscountPolicy = TicketDiscountPolicy(
+    strategies = listOf(
+        MoviedayDiscount(),
+        TimeDiscount(),
+    )
+)
+
+private val totalDiscountPolicy = TotalDiscountPolicy(
+    strategies = listOf(
+        PaymentDiscount(),
+    )
+)
