@@ -21,9 +21,12 @@ class ScreeningScheduleTest {
 
     @Test
     fun `한 영화가 동시에 상영될 경우 예외를 던진다`() {
+
+        // given
         val startTime = LocalDateTime.of(2026, 4, 8, 10, 0)
         val movie = createMovie(title = "허닛")
 
+        // when
         val screening1 = createScreening(
             movie = movie,
             startTime = startTime,
@@ -34,6 +37,8 @@ class ScreeningScheduleTest {
             startTime = startTime,
             room = createScreeningRoom("커브볼 2관")
         )
+
+        // then
         shouldThrow<IllegalArgumentException> {
             ScreeningSchedule(listOf(screening1, screening2))
         }

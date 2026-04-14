@@ -4,33 +4,26 @@ import domain.DomainTestFixture.createMovie
 import domain.DomainTestFixture.createScreening
 import domain.DomainTestFixture.createScreeningRoom
 import domain.DomainTestFixture.seatA1
-import domain.movie.Movie
-import domain.movie.RunningTime
-import domain.movie.Title
 import domain.common.TimeRange
-import domain.seat.Column
-import domain.seat.Row
-import domain.seat.Seat
-import domain.seat.SeatPosition
-import domain.seat.Seats
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
 class ScreeningTest {
     @Test
     fun `상영은 영화, 상영관, 상영 날짜 및 시간을 가진다`() {
+
+        // given
         val movie = createMovie()
         val room = createScreeningRoom()
         val startTime = LocalDateTime.of(2026, 4, 8, 10, 0)
 
+        // when
         val screening = createScreening(movie, room, startTime)
 
+        // then
         screening.movie shouldBe movie
         screening.room shouldBe room
         screening.startTime shouldBe startTime
@@ -38,8 +31,8 @@ class ScreeningTest {
 
     @Test
     fun `상영 시작 시간과 영화 상영 길이에 따른 시작 및 종료 시간을 가진다`() {
-        // given
 
+        // given
         val movie = createMovie(runningTime = 167)
         val startTime = LocalDateTime.of(2026, 4, 8, 10, 0)
         val screening = createScreening(movie = movie, startTime = startTime)
@@ -51,11 +44,13 @@ class ScreeningTest {
 
     @Test
     fun `상영 시간이 상영관의 운영시간에 포함되지 않을 경우 예외를 던진다`() {
+
         // given
         val room = createScreeningRoom(
             operatingTime = TimeRange(LocalTime.of(10, 0), LocalTime.of(18, 0))
         )
         val outOfRangeTime = LocalDateTime.of(2026, 4, 8, 9, 0)
+
         // when & then
         shouldThrow<IllegalArgumentException> {
             createScreening(room = room, startTime = outOfRangeTime)
@@ -64,6 +59,7 @@ class ScreeningTest {
 
     @Test
     fun `좌석 예약 시 해당 좌석이 예약된 새로운 Screening 객체를 반환한다`() {
+
         // given
         val screening = createScreening()
         val position = seatA1()
@@ -79,6 +75,7 @@ class ScreeningTest {
 
     @Test
     fun `상영 시간이 겹치는지 확인할 수 있다`() {
+
         // given
         val startTime = LocalDateTime.of(2026, 4, 10, 10, 0)
         val s1 = createScreening(startTime = startTime)
@@ -90,6 +87,7 @@ class ScreeningTest {
 
     @Test
     fun `동일한 ID를 가진 상영인지 확인할 수 있다`() {
+
         // given
         val s1 = createScreening()
         val s2 = s1.reserve(seatA1())
