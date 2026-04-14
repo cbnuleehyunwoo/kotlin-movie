@@ -1,6 +1,4 @@
-package domain.payment
-
-import domain.common.Money
+package domain.common
 
 data class Point(
     val amount: Int,

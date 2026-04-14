@@ -1,6 +1,7 @@
 package domain.payment
 
 import domain.common.Money
+import domain.common.Point
 import domain.discount.PaymentDiscountContext
 import domain.discount.TicketDiscountContext
 import domain.discount.TicketDiscountPolicy

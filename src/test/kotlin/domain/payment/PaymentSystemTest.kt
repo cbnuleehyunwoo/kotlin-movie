@@ -4,6 +4,7 @@ import domain.common.Money
 import domain.DomainTestFixture.createTicket
 import domain.DomainTestFixture.ticketDiscountPolicy
 import domain.DomainTestFixture.totalDiscountPolicy
+import domain.common.Point
 import domain.ticket.TicketBucket
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows

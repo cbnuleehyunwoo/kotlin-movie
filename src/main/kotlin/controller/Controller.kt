@@ -9,7 +9,7 @@ import domain.discount.TotalDiscountPolicy
 import domain.movie.Title
 import domain.payment.PaymentSystem
 import domain.payment.PaymentType
-import domain.payment.Point
+import domain.common.Point
 import domain.screening.Screening
 import domain.screening.ScreeningSchedule
 import domain.ticket.Ticket

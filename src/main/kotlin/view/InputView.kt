@@ -2,7 +2,7 @@ package view
 
 import domain.movie.Title
 import domain.payment.PaymentType
-import domain.payment.Point
+import domain.common.Point
 import domain.seat.Column
 import domain.seat.Row
 import domain.seat.SeatPosition

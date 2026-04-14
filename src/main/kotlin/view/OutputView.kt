@@ -1,7 +1,7 @@
 package view
 
 import domain.common.Money
-import domain.payment.Point
+import domain.common.Point
 import domain.screening.ScreeningSchedule
 import domain.seat.Seats
 import domain.ticket.TicketBucket
