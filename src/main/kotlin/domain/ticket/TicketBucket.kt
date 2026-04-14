@@ -1,7 +1,5 @@
 package domain.ticket
 
-import domain.common.Money
-
 data class TicketBucket(
     val tickets: List<Ticket> = emptyList(),
 ) {
