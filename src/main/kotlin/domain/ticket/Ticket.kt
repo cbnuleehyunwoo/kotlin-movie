@@ -2,7 +2,6 @@ package domain.ticket
 
 import domain.common.Money
 import domain.screening.Screening
-import domain.seat.SeatGrade
 import domain.seat.SeatPositions
 
 data class Ticket(
@@ -22,8 +21,7 @@ data class Ticket(
     private fun calculate(): Money {
         var total = Money(0)
         for(position in seatPositions.positions) {
-            val grade = SeatGrade.of(position)
-            total += grade.price
+            total += position.price
         }
         return total
     }

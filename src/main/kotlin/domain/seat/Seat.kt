@@ -1,5 +1,7 @@
 package domain.seat
 
+import domain.common.Money
+
 data class Seat(
     val position: SeatPosition,
     val state: ReserveState = ReserveState.AVAILABLE,
@@ -19,6 +21,8 @@ enum class ReserveState {
 data class SeatPosition(
     val row: Row,
     val column: Column,
+
 ) {
+    val price: Money = SeatGrade.of(this).price
     override fun toString(): String = "$row$column"
 }
