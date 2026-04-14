@@ -33,9 +33,9 @@ object InputParser {
 
     fun parseSeats(input: String): SeatPositions {
         val formatted =
-            input.split(",").map { it ->
+            input.split(",").map {
                 val matchResult = SEAT_FORMAT_REGEX.find(it.trim())
-                val (full, rawR, rawC) =
+                val (_, rawR, rawC) =
                     matchResult?.groupValues
                         ?: throw IllegalArgumentException("잘못된 입력입니다. 다시 입력해주세용가리치킨")
                 SeatPosition(Row(rawR), Column(rawC.toInt()))
