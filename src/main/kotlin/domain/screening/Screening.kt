@@ -17,6 +17,14 @@ class Screening(
     val seats: Seats = room.seats
 ) {
 
+    fun isOverlapping(other: Screening): Boolean {
+        return this.screenTimeRange.isOverlapping(other.screenTimeRange)
+    }
+
+    fun isSame(other: Screening): Boolean {
+        return this.id == other.id
+    }
+
     val screenTimeRange: TimeRange =
         TimeRange(
             startTime.toLocalTime(),

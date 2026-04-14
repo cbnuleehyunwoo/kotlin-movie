@@ -11,13 +11,11 @@ data class Ticket(
     val totalPrice = calculate()
 
     fun isOverlapping(other: Ticket): Boolean =
-        screening.screenTimeRange.isOverlapping(other.screening.screenTimeRange)
-
+        screening.isOverlapping(other.screening)
     fun isSameScreening(other: Ticket): Boolean =
-        screening.id == other.screening.id
-
+        screening.isSame(other.screening)
     fun hasSameSeat(other: Ticket): Boolean =
-        seatPositions.positions.any { it in other.seatPositions.positions }
+        seatPositions.hasAnyOverlap(other.seatPositions)
     private fun calculate(): Money {
         var total = Money(0)
         for(position in seatPositions.positions) {
