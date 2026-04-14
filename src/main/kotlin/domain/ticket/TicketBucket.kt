@@ -1,8 +1,20 @@
 package domain.ticket
 
+import domain.screening.Screening
+
 data class TicketBucket(
     val tickets: List<Ticket> = emptyList(),
 ) {
+
+    fun isSchedulable(newScreening: Screening): Boolean {
+        return tickets.none { it.screening.isOverlapping(newScreening) && !it.screening.isSame(newScreening) }
+    }
+
+    fun validateSchedulable(newScreening: Screening) {
+        if (!isSchedulable(newScreening)) {
+            throw IllegalArgumentException("이미 장바구니에 담긴 티켓과 시간이 겹칩니다.")
+        }
+    }
 
     fun addTicket(newTicket: Ticket): TicketBucket {
         for (ticket in tickets) {

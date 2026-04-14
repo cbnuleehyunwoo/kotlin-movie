@@ -44,7 +44,7 @@ class Controller(
             val reserveDate = getReserveDate()
             val movieSchedule = schedule.getMovieSchedule(movieTitle, reserveDate)
 
-            val selectedScreening = selectMovieScreening(movieSchedule)
+            val selectedScreening = selectMovieScreening(ticketBucket, movieSchedule)
             ticketBucket = selectSeats(ticketBucket, selectedScreening)
             OutputView.displayAddedBucket(ticketBucket)
         } while (confirmAddExtraMovie())
@@ -79,11 +79,16 @@ class Controller(
             InputView.readDate()
         }
 
-    private fun selectMovieScreening(movieSchedule: ScreeningSchedule): Screening =
+    private fun selectMovieScreening(
+        ticketBucket: TicketBucket,
+        movieSchedule: ScreeningSchedule,
+    ): Screening =
         retryUntilValid {
             OutputView.selectMovieSchedulePrompt(movieSchedule)
             val select = InputView.readNum()
-            movieSchedule.screenings[select - 1]
+            val selected = movieSchedule.screenings[select - 1]
+            ticketBucket.validateSchedulable(selected)
+            return selected
         }
 
     private fun selectSeats(

@@ -19,8 +19,14 @@ fun main() {
 
 object InitData {
     fun createSchedule(): ScreeningSchedule {
-        val movie = Movie(
+        val movie1 = Movie(
             title = Title("허닛"),
+            runningTime = RunningTime(167),
+            screeningPeriod = ScreeningPeriod(LocalDate.of(2026, 4, 8), LocalDate.of(2026, 4, 9))
+        )
+
+        val movie2 = Movie(
+            title = Title("커비"),
             runningTime = RunningTime(167),
             screeningPeriod = ScreeningPeriod(LocalDate.of(2026, 4, 8), LocalDate.of(2026, 4, 9))
         )
@@ -32,8 +38,10 @@ object InitData {
 
         return ScreeningSchedule(
             listOf(
-                Screening(movie = movie, room = room, startTime = LocalDateTime.of(2026, 4, 8, 10, 0)),
-                Screening(movie = movie, room = room, startTime = LocalDateTime.of(2026, 4, 8, 14, 0))
+                Screening(movie = movie1, room = room, startTime = LocalDateTime.of(2026, 4, 8, 10, 0)),
+                Screening(movie = movie1, room = room, startTime = LocalDateTime.of(2026, 4, 8, 14, 0)),
+                Screening(movie = movie2, room = room, startTime = LocalDateTime.of(2026, 4, 8, 10, 0)),
+                Screening(movie = movie2, room = room, startTime = LocalDateTime.of(2026, 4, 8, 14, 0)),
             )
         )
     }
