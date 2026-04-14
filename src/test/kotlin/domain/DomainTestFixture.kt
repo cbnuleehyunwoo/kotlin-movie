@@ -17,10 +17,11 @@ import java.time.LocalTime
 object DomainTestFixture {
     fun createMovie(
         title: String = "허닛",
+        runningTime: Int = 167,
         startDate: LocalDate = LocalDate.of(2026, 4, 8)
     ) = Movie(
         title = Title(title),
-        runningTime = RunningTime(167),
+        runningTime = RunningTime(runningTime),
         screeningPeriod = ScreeningPeriod(
             startDate = startDate,
             endDate = startDate.plusDays(1)
@@ -29,10 +30,11 @@ object DomainTestFixture {
 
     fun createScreeningRoom(
         name: String = "커피",
+        operatingTime: TimeRange = TimeRange(LocalTime.of(10, 0), LocalTime.of(18, 0)),
         seats: List<Seat> = listOf(Seat(position = SeatPosition(Row("A"), Column(1))))
     ) = ScreeningRoom(
         name = ScreeningRoomName(name),
-        operatingTime = TimeRange(LocalTime.of(10, 0), LocalTime.of(18, 0)),
+        operatingTime = operatingTime,
         seats = Seats(seats)
     )
 
