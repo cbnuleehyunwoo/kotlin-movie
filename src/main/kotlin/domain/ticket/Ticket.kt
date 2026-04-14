@@ -8,7 +8,7 @@ data class Ticket(
     val screening: Screening,
     val seatPositions: SeatPositions,
 ) {
-    val totalPrice get() = calculate()
+    val totalPrice = calculate()
 
     fun isOverlapping(other: Ticket): Boolean =
         screening.screenTimeRange.isOverlapping(other.screening.screenTimeRange)
