@@ -1,6 +1,12 @@
 package controller
 
 import domain.common.Money
+import domain.discount.MoviedayDiscount
+import domain.discount.PaymentDiscount
+import domain.discount.TicketDiscountPolicy
+import domain.discount.TicketDiscountStrategy
+import domain.discount.TimeDiscount
+import domain.discount.TotalDiscountPolicy
 import domain.payment.PaymentSystem
 import domain.payment.PaymentType
 import domain.payment.Point
@@ -16,7 +22,19 @@ import java.time.LocalDate
 class Controller(
     val schedule: ScreeningSchedule,
 ) {
-    val paymentSystem = PaymentSystem()
+    val paymentSystem = PaymentSystem(
+        ticketDiscountStrategy = TicketDiscountPolicy(
+            strategies = listOf(
+                MoviedayDiscount(),
+                TimeDiscount(),
+            )
+        ),
+        totalDiscountStrategy = TotalDiscountPolicy(
+            strategies = listOf(
+                PaymentDiscount(),
+            )
+        )
+    )
 
     fun run() {
         if (!startReservation()) return

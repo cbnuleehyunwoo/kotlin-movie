@@ -1,27 +1,15 @@
 package domain.payment
 
 import domain.common.Money
-import domain.discount.MoviedayDiscount
-import domain.discount.PaymentDiscount
 import domain.discount.PaymentDiscountContext
 import domain.discount.TicketDiscountContext
 import domain.discount.TicketDiscountPolicy
-import domain.discount.TimeDiscount
 import domain.discount.TotalDiscountPolicy
 import domain.ticket.TicketBucket
 
 class PaymentSystem(
-    private val ticketDiscountStrategy: TicketDiscountPolicy = TicketDiscountPolicy(
-        strategies = listOf(
-            MoviedayDiscount(),
-            TimeDiscount(),
-        )
-    ),
-    private val totalDiscountStrategy: TotalDiscountPolicy = TotalDiscountPolicy(
-        strategies = listOf(
-            PaymentDiscount(),
-        )
-    )
+    private val ticketDiscountStrategy: TicketDiscountPolicy,
+    private val totalDiscountStrategy: TotalDiscountPolicy
 ) {
     fun calculate(
         point: Point,
