@@ -4,9 +4,9 @@ import domain.common.Money
 import domain.discount.MoviedayDiscount
 import domain.discount.PaymentDiscount
 import domain.discount.TicketDiscountPolicy
-import domain.discount.TicketDiscountStrategy
 import domain.discount.TimeDiscount
 import domain.discount.TotalDiscountPolicy
+import domain.movie.Title
 import domain.payment.PaymentSystem
 import domain.payment.PaymentType
 import domain.payment.Point
@@ -14,7 +14,6 @@ import domain.screening.Screening
 import domain.screening.ScreeningSchedule
 import domain.ticket.Ticket
 import domain.ticket.TicketBucket
-import domain.movie.Title
 import view.InputView
 import view.OutputView
 import java.time.LocalDate
@@ -65,29 +64,25 @@ class Controller(
     private fun startReservation(): Boolean =
         retryUntilValid {
             OutputView.createNewReservePrompt()
-            val input = InputView.read()
-            InputParser.parseYN(input)
+            InputView.readYN()
         }
 
     private fun getMovie(): Title =
         retryUntilValid {
             OutputView.reserveMoviePrompt()
-            val input = InputView.read()
-            InputParser.parseMovieTitle(input)
+            InputView.readMovieTitle()
         }
 
     private fun getReserveDate(): LocalDate =
         retryUntilValid {
             OutputView.reserveDatePrompt()
-            val input = InputView.read()
-            InputParser.parseDate(input)
+            InputView.readDate()
         }
 
     private fun selectMovieScreening(movieSchedule: ScreeningSchedule): Screening =
         retryUntilValid {
             OutputView.selectMovieSchedulePrompt(movieSchedule)
-            val input = InputView.read()
-            val select = InputParser.parseNum(input)
+            val select = InputView.readNum()
             movieSchedule.screenings[select - 1]
         }
 
@@ -97,8 +92,7 @@ class Controller(
     ): TicketBucket =
         retryUntilValid {
             OutputView.selectSeatsPrompt(screening.seats)
-            val input = InputView.read()
-            val selectedSeats = InputParser.parseSeats(input)
+            val selectedSeats = InputView.readSeats()
             screening.canReserve(selectedSeats)
 
             ticketBucket.addTicket(Ticket(screening, selectedSeats))
@@ -107,29 +101,25 @@ class Controller(
     private fun confirmAddExtraMovie(): Boolean =
         retryUntilValid {
             OutputView.addExtraMoviePrompt()
-            val input = InputView.read()
-            InputParser.parseYN(input)
+            InputView.readYN()
         }
 
     private fun getPoint(): Point =
         retryUntilValid {
             OutputView.pointPrompt()
-            val input = InputView.read()
-            InputParser.parsePoint(input)
+            InputView.readPoint()
         }
 
     private fun getPaymentType(): PaymentType =
         retryUntilValid {
             OutputView.selectPaymentType()
-            val input = InputView.read()
-            InputParser.parsePaymentType(input)
+            InputView.readPaymentType()
         }
 
     private fun confirmPurchase(totalPrice: Money): Boolean =
         retryUntilValid {
             OutputView.decideToPayPrompt(totalPrice)
-            val input = InputView.read()
-            InputParser.parseYN(input)
+            InputView.readYN()
         }
 
     private inline fun <T> retryUntilValid(block: () -> T): T {
