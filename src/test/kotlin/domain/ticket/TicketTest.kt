@@ -1,166 +1,58 @@
 package domain.ticket
 
-import domain.movie.Movie
-import domain.movie.RunningTime
-import domain.movie.Title
-import domain.screening.Screening
-import domain.screening.ScreeningPeriod
-import domain.screening.ScreeningRoom
-import domain.screening.ScreeningRoomName
-import domain.common.TimeRange
-import domain.seat.Column
-import domain.seat.Row
-import domain.seat.Seat
-import domain.seat.SeatPosition
+import domain.DomainTestFixture.createScreening
+import domain.DomainTestFixture.createTicket
+import domain.DomainTestFixture.seatA1
+import domain.DomainTestFixture.seatA2
 import domain.seat.SeatPositions
-import domain.seat.Seats
-import org.junit.jupiter.api.Assertions.assertThrows
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 class TicketTest {
     @Test
-    fun `상영 정보와 예매 좌석을 가진다`() {
-        Ticket(
-            screening =
-                Screening(
-                    movie =
-                        Movie(
-                            title = Title("허닛"),
-                            runningTime = RunningTime(167),
-                            screeningPeriod =
-                                ScreeningPeriod(
-                                    startDate = LocalDate.of(
-                                        2026,
-                                        4,
-                                        8
-                                    ),
-                                    endDate = LocalDate.of(
-                                        2026,
-                                        4,
-                                        9
-                                    ),
-                                ),
-                        ),
-                    room =
-                        ScreeningRoom(
-                            name = ScreeningRoomName("커피"),
-                            operatingTime = TimeRange(
-                                LocalTime.of(
-                                    10,
-                                    0
-                                ),
-                                LocalTime.of(
-                                    18,
-                                    0
-                                )
-                            ),
-                            seats =
-                                Seats(
-                                    listOf(
-                                        Seat(
-                                            position =
-                                                SeatPosition(
-                                                    Row("A"),
-                                                    Column(1),
-                                                ),
-                                        ),
-                                    ),
-                                ),
-                        ),
-                    startTime = LocalDateTime.of(
-                        2026,
-                        4,
-                        8,
-                        10,
-                        0
-                    ),
-                ),
-            seatPositions = SeatPositions(
-                listOf(
-                    SeatPosition(
-                        Row("A"),
-                        Column(1)
-                    )
-                )
-            ),
-        )
+    fun `티켓은 상영 정보와 예매 좌석 정보를 가진다`() {
+        // given
+        val screening = createScreening()
+        val selectedPositions = SeatPositions(listOf(seatA1(), seatA2()))
+
+        // when
+        val ticket = Ticket(screening, selectedPositions)
+
+        // then
+        ticket.screening shouldBe screening
+        ticket.seatPositions shouldBe selectedPositions
     }
 
     @Test
-    fun `예매 좌석에 중복이 있을 경우 예외를 던진다`() {
-        assertThrows(IllegalArgumentException::class.java) {
-            Ticket(
-                screening =
-                    Screening(
-                        movie =
-                            Movie(
-                                title = Title("허닛"),
-                                runningTime = RunningTime(167),
-                                screeningPeriod =
-                                    ScreeningPeriod(
-                                        startDate = LocalDate.of(
-                                            2026,
-                                            4,
-                                            8
-                                        ),
-                                        endDate = LocalDate.of(
-                                            2026,
-                                            4,
-                                            9
-                                        ),
-                                    ),
-                            ),
-                        room =
-                            ScreeningRoom(
-                                name = ScreeningRoomName("커피"),
-                                operatingTime = TimeRange(
-                                    LocalTime.of(
-                                        10,
-                                        0
-                                    ),
-                                    LocalTime.of(
-                                        18,
-                                        0
-                                    )
-                                ),
-                                seats =
-                                    Seats(
-                                        listOf(
-                                            Seat(
-                                                position =
-                                                    SeatPosition(
-                                                        Row("A"),
-                                                        Column(1),
-                                                    ),
-                                            ),
-                                        ),
-                                    ),
-                            ),
-                        startTime = LocalDateTime.of(
-                            2026,
-                            4,
-                            8,
-                            10,
-                            0
-                        ),
-                    ),
-                seatPositions =
-                    SeatPositions(
-                        listOf(
-                            SeatPosition(
-                                Row("A"),
-                                Column(1)
-                            ),
-                            SeatPosition(
-                                Row("A"),
-                                Column(1)
-                            ),
-                        ),
-                    ),
-            )
-        }
+    fun `두 티켓의 상영 시간이 겹치는 티켓이라면 true를 반환한다`() {
+        // given
+        val startTime = LocalDateTime.of(2026, 4, 10, 10, 0)
+        val ticket1 = createTicket(screening = createScreening(startTime = startTime))
+        val ticket2 = createTicket(screening = createScreening(startTime = startTime.plusMinutes(30)))
+
+        // when & then
+        ticket1.isOverlapping(ticket2) shouldBe true
+    }
+
+    @Test
+    fun `두 티켓이 동일한 상영 회차의 티켓이라면 true를 반환한다`() {
+        // given
+        val screening = createScreening()
+        val ticket1 = createTicket(screening = screening)
+        val ticket2 = createTicket(screening = screening)
+
+        // when & then
+        ticket1.isSameScreening(ticket2) shouldBe true
+    }
+
+    @Test
+    fun `두 티켓 간에 동일한 좌석이 포함되어 있다면 true를 반환한다`() {
+        // given
+        val ticket1 = createTicket(seatPositions = SeatPositions(listOf(seatA1(), seatA2())))
+        val ticket2 = createTicket(seatPositions = SeatPositions(listOf(seatA1())))
+
+        // when & then
+        ticket1.hasSameSeat(ticket2) shouldBe true
     }
 }
