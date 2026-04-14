@@ -1,5 +1,6 @@
 package domain.seat
 
+import domain.common.Money
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -15,7 +16,7 @@ class SeatGradeTest {
         given: SeatGrade,
         expected: Int,
     ) {
-        assertThat(given.price).isEqualTo(expected)
+        assertThat(given.price).isEqualTo(Money(expected))
     }
 
     @ParameterizedTest(name = "행: {0}, 열: {1}")
