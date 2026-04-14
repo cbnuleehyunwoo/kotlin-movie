@@ -1,33 +1,13 @@
 package domain.payment
 
 import domain.common.Money
-import domain.common.TimeRange
-import domain.discount.MoviedayDiscount
-import domain.discount.PaymentDiscount
-import domain.discount.TicketDiscountPolicy
-import domain.discount.TimeDiscount
-import domain.discount.TotalDiscountPolicy
-import domain.movie.Movie
-import domain.movie.RunningTime
-import domain.movie.Title
-import domain.screening.Screening
-import domain.screening.ScreeningPeriod
-import domain.screening.ScreeningRoom
-import domain.screening.ScreeningRoomName
-import domain.seat.Column
-import domain.seat.Row
-import domain.seat.Seat
-import domain.seat.SeatPosition
-import domain.seat.SeatPositions
-import domain.seat.Seats
-import domain.ticket.Ticket
+import domain.DomainTestFixture.createTicket
+import domain.DomainTestFixture.ticketDiscountPolicy
+import domain.DomainTestFixture.totalDiscountPolicy
 import domain.ticket.TicketBucket
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 
 class PaymentSystemTest {
 
@@ -56,50 +36,5 @@ class PaymentSystemTest {
             )
         }
     }
-
-    private fun createTicket() = Ticket(
-        screening = createScreening(),
-        seatPositions = SeatPositions(listOf(SeatPosition(Row("A"), Column(1)))),
-    )
-
-    private fun createScreening() = Screening(
-        movie = createMovie(),
-        room = createScreeningRoom(),
-        startTime = LocalDateTime.of(2026, 4, 10, 10, 0),
-    )
-    private fun createScreeningRoom() = ScreeningRoom(
-        name = ScreeningRoomName("커피"),
-        operatingTime = TimeRange(
-            LocalTime.of(10, 0),
-            LocalTime.of(18, 0),
-        ),
-        seats = Seats(
-            listOf(
-                Seat(
-                    position = SeatPosition(Row("A"), Column(1)),
-                ),
-            ),
-        ),
-    )
-    private fun createMovie() = Movie(
-        title = Title("허닛"),
-        runningTime = RunningTime(167),
-        screeningPeriod = ScreeningPeriod(
-            startDate = LocalDate.of(2026, 4, 8),
-            endDate = LocalDate.of(2026, 4, 9),
-        ),
-    )
 }
 
-private val ticketDiscountPolicy = TicketDiscountPolicy(
-    strategies = listOf(
-        MoviedayDiscount(),
-        TimeDiscount(),
-    )
-)
-
-private val totalDiscountPolicy = TotalDiscountPolicy(
-    strategies = listOf(
-        PaymentDiscount(),
-    )
-)
