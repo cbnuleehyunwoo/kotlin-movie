@@ -2,6 +2,7 @@ package domain.ticket
 
 import domain.common.Money
 import domain.screening.Screening
+import domain.seat.SeatGrade
 import domain.seat.SeatPositions
 
 data class Ticket(
@@ -18,5 +19,13 @@ data class Ticket(
 
     fun hasSameSeat(other: Ticket): Boolean =
         seatPositions.positions.any { it in other.seatPositions.positions }
-    private fun calculate(): Money = seatPositions.calculate()
+    private fun calculate(): Money {
+        var total = Money(0)
+        for(position in seatPositions.positions) {
+            val grade = SeatGrade.of(position)
+            total += grade.price
+        }
+        return total
+    }
+
 }
