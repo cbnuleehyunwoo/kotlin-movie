@@ -50,7 +50,7 @@ class Screening(
                 seats = seats.updateState(position, ReserveState.RESERVED)
         )
 
-    fun canReserve(positions: SeatPositions) {
-        require(positions.positions.all { seats.canReserve(it) }) { "이미 예약된 좌석입니다." }
+    fun isReservable(positions: SeatPositions) {
+        require(positions.positions.all { seats.isReservable(it) }) { "이미 예약된 좌석입니다." }
     }
 }

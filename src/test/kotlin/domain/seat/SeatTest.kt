@@ -84,6 +84,6 @@ class SeatTest {
             )
         )
         val expected = true
-        assertThat(given.canReserve()).isEqualTo(expected)
+        assertThat(given.isReservable()).isEqualTo(expected)
     }
 }

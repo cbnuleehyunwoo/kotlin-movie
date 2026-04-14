@@ -9,11 +9,11 @@ data class Seats(
 
     fun contains(position: SeatPosition): Boolean = seats.any { it.position == position }
 
-    fun canReserve(position: SeatPosition): Boolean {
+    fun isReservable(position: SeatPosition): Boolean {
         val target =
             seats.find { it.position == position }
                 ?: throw IllegalArgumentException("존재하지 않는 좌석입니다")
-        return target.canReserve()
+        return target.isReservable()
     }
 
     fun updateState(

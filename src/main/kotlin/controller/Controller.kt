@@ -93,7 +93,7 @@ class Controller(
         retryUntilValid {
             OutputView.selectSeatsPrompt(screening.seats)
             val selectedSeats = InputView.readSeats()
-            screening.canReserve(selectedSeats)
+            screening.isReservable(selectedSeats)
 
             ticketBucket.addTicket(Ticket(screening, selectedSeats))
         }

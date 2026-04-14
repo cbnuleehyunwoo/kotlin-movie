@@ -68,8 +68,8 @@ class ScreeningTest {
         val reservedScreening = screening.reserve(position)
 
         // then
-        screening.seats.canReserve(position) shouldBe true
-        reservedScreening.seats.canReserve(position) shouldBe false
+        screening.seats.isReservable(position) shouldBe true
+        reservedScreening.seats.isReservable(position) shouldBe false
 
     }
 
