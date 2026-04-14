@@ -22,16 +22,8 @@ class ScreeningPeriodTest {
 
     @Test
     fun `종료일이 시작일보다 앞 설 경우 예외를 던진다`() {
-        val startDate = LocalDate.of(
-            2026,
-            4,
-            8
-        )
-        val endDate = LocalDate.of(
-            2026,
-            4,
-            7
-        )
+        val startDate = LocalDate.of(2026, 4, 8)
+        val endDate = LocalDate.of(2026, 4, 7)
         assertThrows(IllegalArgumentException::class.java) {
             ScreeningPeriod(
                 startDate = startDate,
