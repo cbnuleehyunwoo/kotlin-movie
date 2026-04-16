@@ -19,9 +19,9 @@ import view.OutputView
 import java.time.LocalDate
 
 class Controller(
-    val schedule: ScreeningSchedule,
+    private val schedule: ScreeningSchedule,
 ) {
-    val paymentSystem = PaymentSystem(
+    private val paymentSystem = PaymentSystem(
         ticketDiscountStrategy = TicketDiscountPolicy(
             strategies = listOf(
                 MoviedayDiscount(),
