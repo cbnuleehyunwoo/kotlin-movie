@@ -1,6 +1,20 @@
 # kotlin-movie
 
-# 기능 목록
+
+## 3단계 시작 전 피드백 적용
+- [x] Controller 클래스 내 프로퍼티 가시성 수정 (public -> private)
+- [x] Ticket 클래스의 calculate 메서드 내 루프를 forEach로 변경
+- [x] ScreeningSchedule 불변 객체 반환이 controller의 schedule에 반영되도록 변경
+
+## 3단계 요구사항 목록
+
+- [ ] H2 데이터베이스 의존성 추가
+- [ ] 데이터베이스 스키마 설계
+- [ ] 
+
+
+
+## 1 | 2단계 기능 목록
 
 ## 도메인 - 모델
 
