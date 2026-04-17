@@ -61,6 +61,46 @@ class ScreeningRepository(
         return screenings
     }
 
+    fun findById(id: Long): Screening {
+        val sql = """
+            SELECT s.id as s_id, s.start_time, 
+                   m.id as m_id, m.title, m.running_time, m.start_date, m.end_date,
+                   r.id as r_id, r.name, r.operating_start_time, r.operating_end_time
+            FROM screenings s
+            JOIN movies m ON s.movie_id = m.id
+            JOIN screening_rooms r ON s.room_id = r.id
+            WHERE s.id = ?
+        """.trimIndent()
+
+        dataSource.connection.use { connection ->
+            connection.prepareStatement(sql).use { stmt ->
+                stmt.setLong(1, id)
+                stmt.executeQuery().use { rs ->
+                    if (rs.next()) {
+                        val movie = mapMovie(rs)
+                        val room = mapRoom(rs)
+                        val startTime = rs.getTimestamp("start_time").toLocalDateTime()
+
+                        val reservedSeats = findReservedSeats(connection, id)
+                        var seats = room.seats
+                        reservedSeats.forEach { position ->
+                            seats = seats.updateState(position, ReserveState.RESERVED)
+                        }
+
+                        return Screening(
+                            id = id,
+                            movie = movie,
+                            room = room,
+                            startTime = startTime,
+                            seats = seats
+                        )
+                    }
+                }
+            }
+        }
+        throw IllegalArgumentException("해당 ID의 상영 정보를 찾을 수 없습니다: $id")
+    }
+
     private fun findReservedSeats(connection: Connection, screeningId: Long): List<SeatPosition> {
         val sql = "SELECT seat_row, seat_column FROM reserved_seats WHERE screening_id = ?"
         val positions = mutableListOf<SeatPosition>()
