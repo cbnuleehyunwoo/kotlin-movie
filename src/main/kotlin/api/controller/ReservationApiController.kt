@@ -30,25 +30,29 @@ class ReservationApiController(
             val screening = screeningRepository.findById(item.screeningId)
             val positions = item.seats.map { parseSeat(it) }
             val seatPositions = SeatPositions(positions)
-            
             screening.isReservable(seatPositions)
-            
             Ticket(screening, seatPositions)
         }
 
-        val paymentType = PaymentType.valueOf(request.paymentMethod)
-        val usedPoints = Money(request.usedPoints)
-        
-        var ticketsTotal = Money(0)
-        tickets.forEach { ticketsTotal += it.totalPrice }
-        
-        val discountedPrice = ticketsTotal * (1 - paymentType.discountRate)
-        val finalPrice = discountedPrice - usedPoints
+        val paymentSystem = domain.payment.PaymentSystem(
+            ticketDiscountStrategy = domain.discount.TicketDiscountPolicy(
+                listOf(domain.discount.MoviedayDiscount(), domain.discount.TimeDiscount())
+            ),
+            totalDiscountStrategy = domain.discount.TotalDiscountPolicy(
+                listOf(domain.discount.PaymentDiscount())
+            )
+        )
+
+        val finalPrice = paymentSystem.calculate(
+            point = domain.common.Point(request.usedPoints),
+            payment = PaymentType.valueOf(request.paymentMethod),
+            ticketBucket = domain.ticket.TicketBucket(tickets)
+        )
 
         val reservation = Reservation(
             tickets = tickets,
-            usedPoints = usedPoints,
-            paymentMethod = paymentType,
+            usedPoints = Money(request.usedPoints),
+            paymentMethod = PaymentType.valueOf(request.paymentMethod),
             totalPrice = finalPrice
         )
 
@@ -64,7 +68,7 @@ class ReservationApiController(
     }
 
     private fun parseSeat(seatStr: String): SeatPosition {
-        val rowStr = seatStr.substring(0, 1)
+        val rowStr = seatStr.take(1)
         val colInt = seatStr.substring(1).toInt()
         return SeatPosition(Row(rowStr), Column(colInt))
     }
