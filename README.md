@@ -13,6 +13,7 @@
 - [x] JdbcConnection 구현 및 테스트 추가 
 - [x] ScreeningRoomRepository 구현 및 테스트 코드 추가
 - [x] MovieRepository 구현 및 테스트 코드 추가
+- [x] ScreeningRepository 구현 및 테스트 코드 추가
 
 
 ### 데이터베이스 스키마 
