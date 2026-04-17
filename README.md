@@ -4,7 +4,9 @@
 
 - [x] Spring 의존성 추가
 - [x] 기존 프로젝트를 console로 분리
-- 
+- [ ] MovieApiController 구현 
+  - [x] 영화 목록 조회 API 추가 
+  - 
 
 ## 3단계 시작 전 피드백 적용
 - [x] Controller 클래스 내 프로퍼티 가시성 수정 (public -> private)
