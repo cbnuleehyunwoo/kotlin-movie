@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import repository.JdbcConnection
 import repository.MovieRepository
+import repository.SimpleDataSource
 import java.sql.Connection
 
 class MovieRepositoryTest {
@@ -18,7 +19,7 @@ class MovieRepositoryTest {
     @BeforeEach
     fun setUp() {
         connection = JdbcConnection.getConnection()
-        movieRepository = MovieRepository(connection)
+        movieRepository = MovieRepository(SimpleDataSource())
 
         connection.createStatement().use { stmt ->
             stmt.execute("DROP TABLE IF EXISTS movies CASCADE")

@@ -1,5 +1,10 @@
 # kotlin-movie
 
+## 4단계 요구사항 목록
+
+- [x] Spring 의존성 추가
+- [x] 기존 프로젝트를 console로 분리
+- 
 
 ## 3단계 시작 전 피드백 적용
 - [x] Controller 클래스 내 프로퍼티 가시성 수정 (public -> private)

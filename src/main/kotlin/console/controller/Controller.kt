@@ -1,4 +1,4 @@
-package controller
+package console.controller
 
 import domain.common.Money
 import domain.discount.MoviedayDiscount
@@ -14,8 +14,8 @@ import domain.screening.Screening
 import domain.screening.ScreeningSchedule
 import domain.ticket.Ticket
 import domain.ticket.TicketBucket
-import view.InputView
-import view.OutputView
+import console.view.InputView
+import console.view.OutputView
 import java.time.LocalDate
 
 class Controller(
