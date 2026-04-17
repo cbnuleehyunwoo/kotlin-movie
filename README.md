@@ -4,9 +4,9 @@
 
 - [x] Spring 의존성 추가
 - [x] 기존 프로젝트를 console로 분리
-- [ ] MovieApiController 구현 
-  - [x] 영화 목록 조회 API 추가 
-  - 
+- [x] MovieApiController 구현 및 테스트 코드 작성
+  - [x] 영화 목록 조회 API 추가 및 테스트 코드 작성
+  - [x] 예매 API 구현 및 ScreeningRepository 상영 조회 기능 추가 및 테스트 코드 작성
 
 ## 3단계 시작 전 피드백 적용
 - [x] Controller 클래스 내 프로퍼티 가시성 수정 (public -> private)
@@ -225,7 +225,8 @@
 
 ### Spring 테스트
 - [x] 영화 목록 조회 요청 시 200 OK를 반환하고 영화와 상영 정보가 포함된다
-- [x] 
+- [x] 정상적인 예매 요청 시 210 Created 응답과 함께 예매 내역을 반환한다
+- [x] 여러 영화를 한 번에 예매할 때 각 상영별 할인이 올바르게 적용되어 최종 금액이 반환된다
 
 ### 영화 테스트
 
