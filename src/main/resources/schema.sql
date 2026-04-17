@@ -53,7 +53,7 @@ INSERT INTO movies (id, title, running_time, start_date, end_date) VALUES (2, '�
 INSERT INTO screening_rooms (id, name, operating_start_time, operating_end_time) VALUES (1, '1관', '09:00:00', '23:00:00');
 INSERT INTO screening_rooms (id, name, operating_start_time, operating_end_time) VALUES (2, '2관', '09:00:00', '23:00:00');
 
-INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (101, 1, 1, '2026-04-10 13:30:00');
-INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (102, 1, 1, '2026-04-10 18:00:00');
-INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (201, 2, 2, '2026-04-11 10:00:00');
-INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (202, 2, 2, '2026-04-11 14:00:00');
+INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (101, 1, 1, '2026-04-20 13:00:00');
+INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (102, 1, 2, '2026-04-20 16:00:00');
+INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (201, 2, 2, '2026-04-30 9:00:00');
+INSERT INTO screenings (id, movie_id, room_id, start_time) VALUES (202, 2, 2, '2026-04-30 9:00:00');
