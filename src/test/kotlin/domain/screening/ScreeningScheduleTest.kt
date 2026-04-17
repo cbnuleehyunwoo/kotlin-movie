@@ -28,14 +28,16 @@ class ScreeningScheduleTest {
 
         // when
         val screening1 = createScreening(
+            id = 1L,
             movie = movie,
             startTime = startTime,
-            room = createScreeningRoom("커브볼 1관")
+            room = createScreeningRoom(name = "커브볼 1관")
         )
         val screening2 = createScreening(
+            id = 2L,
             movie = movie,
             startTime = startTime,
-            room = createScreeningRoom("커브볼 2관")
+            room = createScreeningRoom(name = "커브볼 2관")
         )
 
         // then
