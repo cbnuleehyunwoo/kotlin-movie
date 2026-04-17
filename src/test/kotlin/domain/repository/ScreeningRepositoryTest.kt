@@ -26,10 +26,12 @@ class ScreeningRepositoryTest {
             stmt.execute("CREATE TABLE IF NOT EXISTS movies (id BIGINT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255), running_time INT, start_date DATE, end_date DATE)")
             stmt.execute("CREATE TABLE IF NOT EXISTS screening_rooms (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), operating_start_time TIME, operating_end_time TIME)")
             stmt.execute("CREATE TABLE IF NOT EXISTS screenings (id BIGINT AUTO_INCREMENT PRIMARY KEY, movie_id BIGINT, room_id BIGINT, start_time TIMESTAMP)")
-            stmt.execute("CREATE TABLE IF NOT EXISTS reserved_seats (id BIGINT AUTO_INCREMENT PRIMARY KEY, screening_id BIGINT, seat_row VARCHAR(5), seat_column INT)")
+            stmt.execute("CREATE TABLE IF NOT EXISTS reservations (id BIGINT AUTO_INCREMENT PRIMARY KEY, used_points INT, payment_method VARCHAR(50), total_price INT)")
+            stmt.execute("CREATE TABLE IF NOT EXISTS reserved_seats (id BIGINT AUTO_INCREMENT PRIMARY KEY, reservation_id BIGINT NOT NULL, screening_id BIGINT NOT NULL, seat_row VARCHAR(5), seat_column INT)")
 
             stmt.execute("SET REFERENTIAL_INTEGRITY FALSE")
             stmt.execute("TRUNCATE TABLE reserved_seats RESTART IDENTITY")
+            stmt.execute("TRUNCATE TABLE reservations RESTART IDENTITY")
             stmt.execute("TRUNCATE TABLE screenings RESTART IDENTITY")
             stmt.execute("TRUNCATE TABLE screening_rooms RESTART IDENTITY")
             stmt.execute("TRUNCATE TABLE movies RESTART IDENTITY")
@@ -81,7 +83,11 @@ class ScreeningRepositoryTest {
             it.executeUpdate()
         }
 
-        connection.prepareStatement("INSERT INTO reserved_seats (screening_id, seat_row, seat_column) VALUES (1, 'A', 1)").use {
+        connection.prepareStatement("INSERT INTO reservations (id, used_points, payment_method, total_price) VALUES (1, 0, 'CASH', 0)").use {
+            it.executeUpdate()
+        }
+
+        connection.prepareStatement("INSERT INTO reserved_seats (reservation_id, screening_id, seat_row, seat_column) VALUES (1, 1, 'A', 1)").use {
             it.executeUpdate()
         }
     }
