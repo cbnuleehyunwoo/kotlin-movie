@@ -16,7 +16,6 @@
 - [x] ScreeningRepository 구현 및 테스트 코드 추가
 - [x] ReservationRepository 구현 및 테스트 코드 작성
 
-
 ### 데이터베이스 스키마 
 #### 1. `movies` (영화 정보)
 | 컬럼명 | 타입 | 제약 조건 | 설명 |
@@ -194,6 +193,28 @@
 ---
 
 ## 테스트 목록
+
+### DB 테스트
+
+#### JdbcConnection
+- [x] H2 데이터베이스 연결을 가져올 수 있다
+- [x] 연결된 커넥션은 유효해야 한다
+- [x] 설정된 DB URL이 올바른지 확인한다
+
+#### MovieRepository
+- [x] findAll은 저장된 모든 영화 목록을 반환한다
+- [x] findById는 존재하는 ID로 조회 시 해당 영화를 반환한다
+- [x] findById는 존재하지 않는 ID로 조회 시 예외를 던진다
+
+#### ScreeningRoomRepository
+- [x] findById는 존재하는 상영관 ID로 조회 시 상영관 객체를 반환한다
+- [x] findById는 존재하지 않는 ID로 조회 시 예외를 던진다
+
+#### ScreeningRepository
+- [x] findAll은 모든 상영 정보와 예약된 좌석 상태를 반환한다
+
+#### ReservationRepository
+- [x] save는 예약 정보와 좌석 정보를 저장한다
 
 ### 영화 테스트
 
