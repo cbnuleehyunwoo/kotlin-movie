@@ -9,9 +9,53 @@
 ## 3단계 요구사항 목록
 
 - [x] H2 데이터베이스 의존성 추가
-- [ ] 데이터베이스 스키마 설계
+- [x] 데이터베이스 스키마 설계
 - [ ] 
 
+
+### 데이터베이스 스키마 
+#### 1. `movies` (영화 정보)
+| 컬럼명 | 타입 | 제약 조건 | 설명 |
+| :--- | :--- | :--- | :--- |
+| **id** | BIGINT | PRIMARY KEY, AUTO_INCREMENT | 영화 고유 식별자 |
+| **title** | VARCHAR(255) | NOT NULL | 영화 제목 |
+| **running_time** | INT | NOT NULL | 상영 시간 (분 단위) |
+| **start_date** | DATE | NOT NULL | 상영 시작 가능일 |
+| **end_date** | DATE | NOT NULL | 상영 종료 예정일 |
+
+#### 2. `screening_rooms` (상영관 정보)
+| 컬럼명 | 타입 | 제약 조건 | 설명 |
+| :--- | :--- | :--- | :--- |
+| **id** | BIGINT | PRIMARY KEY, AUTO_INCREMENT | 상영관 고유 식별자 |
+| **name** | VARCHAR(255) | NOT NULL | 상영관 이름 (예: 1관) |
+| **operating_start_time** | TIME | NOT NULL | 영업 시작 시간 |
+| **operating_end_time** | TIME | NOT NULL | 영업 종료 시간 |
+
+#### 3. `screenings` (상영 스케줄)
+| 컬럼명 | 타입 | 제약 조건 | 설명 |
+| :--- | :--- | :--- | :--- |
+| **id** | BIGINT | PRIMARY KEY, AUTO_INCREMENT | 상영 회차 고유 식별자 |
+| **movie_id** | BIGINT | FOREIGN KEY (movies.id) | 상영될 영화 ID |
+| **room_id** | BIGINT | FOREIGN KEY (screening_rooms.id) | 상영될 장소 ID |
+| **start_time** | TIMESTAMP | NOT NULL | 상영 시작 일시 |
+
+#### 4. `reservations` (예매 정보)
+| 컬럼명 | 타입 | 제약 조건 | 설명 |
+| :--- | :--- | :--- | :--- |
+| **id** | BIGINT | PRIMARY KEY, AUTO_INCREMENT | 예매 고유 번호 |
+| **used_points** | INT | NOT NULL | 사용된 포인트 |
+| **payment_method** | VARCHAR(50) | NOT NULL | 결제 수단 (카드, 현금 등) |
+| **total_price** | INT | NOT NULL | 총 결제 금액 |
+| **created_at** | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | 예매 생성 일시 |
+
+#### 5. `reserved_seats` (예약된 좌석 상세)
+| 컬럼명 | 타입 | 제약 조건 | 설명 |
+| :--- | :--- | :--- | :--- |
+| **id** | BIGINT | PRIMARY KEY, AUTO_INCREMENT | 좌석 예약 고유 식별자 |
+| **reservation_id** | BIGINT | FOREIGN KEY (reservations.id) | 연결된 예매 ID |
+| **screening_id** | BIGINT | FOREIGN KEY (screenings.id) | 상영 회차 ID |
+| **seat_row** | VARCHAR(5) | NOT NULL | 좌석 행 (예: A, B) |
+| **seat_column** | INT | NOT NULL | 좌석 열 (예: 1, 2) |
 
 
 ## 1 | 2단계 기능 목록
