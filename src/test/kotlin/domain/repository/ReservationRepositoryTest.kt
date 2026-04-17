@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import repository.JdbcConnection
 import repository.ReservationRepository
+import repository.SimpleDataSource
 import java.sql.Connection
 
 class ReservationRepositoryTest {
@@ -18,7 +19,7 @@ class ReservationRepositoryTest {
     @BeforeEach
     fun setUp() {
         connection = JdbcConnection.getConnection()
-        reservationRepository = ReservationRepository(connection)
+        reservationRepository = ReservationRepository(SimpleDataSource())
 
         connection.createStatement().use { stmt ->
             stmt.execute("""

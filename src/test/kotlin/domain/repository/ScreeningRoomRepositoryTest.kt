@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import repository.JdbcConnection
 import repository.ScreeningRoomRepository
+import repository.SimpleDataSource
 import java.sql.Connection
 import java.sql.Time
 import java.time.LocalTime
@@ -20,7 +21,7 @@ class ScreeningRoomRepositoryTest {
     @BeforeEach
     fun setUp() {
         connection = JdbcConnection.getConnection()
-        roomRepository = ScreeningRoomRepository(connection)
+        roomRepository = ScreeningRoomRepository(SimpleDataSource())
 
         connection.createStatement().use { stmt ->
             stmt.execute("""

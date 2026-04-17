@@ -4,25 +4,29 @@ import domain.common.TimeRange
 import domain.screening.ScreeningRoom
 import domain.screening.ScreeningRoomName
 import domain.seat.*
-import java.sql.Connection
+import org.springframework.stereotype.Repository
+import javax.sql.DataSource
 
-class ScreeningRoomRepository(private val connection: Connection) {
+@Repository
+class ScreeningRoomRepository(private val dataSource: DataSource) {
     fun findById(id: Long): ScreeningRoom {
         val sql = "SELECT * FROM screening_rooms WHERE id = ?"
 
-        connection.prepareStatement(sql).use { stmt ->
-            stmt.setLong(1, id)
-            stmt.executeQuery().use { rs ->
-                if (rs.next()) {
-                    return ScreeningRoom(
-                        id = rs.getLong("id"),
-                        name = ScreeningRoomName(rs.getString("name")),
-                        operatingTime = TimeRange(
-                            rs.getTime("operating_start_time").toLocalTime(),
-                            rs.getTime("operating_end_time").toLocalTime()
-                        ),
-                        seats = createDefaultSeats()
-                    )
+        dataSource.connection.use { connection ->
+            connection.prepareStatement(sql).use { stmt ->
+                stmt.setLong(1, id)
+                stmt.executeQuery().use { rs ->
+                    if (rs.next()) {
+                        return ScreeningRoom(
+                            id = rs.getLong("id"),
+                            name = ScreeningRoomName(rs.getString("name")),
+                            operatingTime = TimeRange(
+                                rs.getTime("operating_start_time").toLocalTime(),
+                                rs.getTime("operating_end_time").toLocalTime()
+                            ),
+                            seats = createDefaultSeats()
+                        )
+                    }
                 }
             }
         }

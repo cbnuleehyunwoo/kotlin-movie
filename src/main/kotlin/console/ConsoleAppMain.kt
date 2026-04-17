@@ -1,7 +1,10 @@
-import controller.Controller
+package console
+
+import console.controller.Controller
 import domain.screening.ScreeningSchedule
 import repository.JdbcConnection
 import repository.ScreeningRepository
+import repository.SimpleDataSource
 import java.io.File
 import java.sql.Connection
 
@@ -9,7 +12,8 @@ fun main() {
     val connection = JdbcConnection.getConnection()
     initializeSchema(connection)
     
-    val screeningRepository = ScreeningRepository(connection)
+    val dataSource = SimpleDataSource()
+    val screeningRepository = ScreeningRepository(dataSource)
     val screenings = screeningRepository.findAll()
     
     val schedule = ScreeningSchedule(screenings)

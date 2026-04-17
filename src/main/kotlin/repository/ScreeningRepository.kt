@@ -9,11 +9,14 @@ import domain.screening.ScreeningRoom
 import domain.screening.ScreeningRoomName
 import domain.seat.*
 import domain.common.TimeRange
+import org.springframework.stereotype.Repository
 import java.sql.Connection
 import java.sql.ResultSet
+import javax.sql.DataSource
 
+@Repository
 class ScreeningRepository(
-    private val connection: Connection
+    private val dataSource: DataSource
 ) {
     fun findAll(): List<Screening> {
         val sql = """
@@ -27,36 +30,38 @@ class ScreeningRepository(
         
         val screenings = mutableListOf<Screening>()
 
-        connection.prepareStatement(sql).use { stmt ->
-            stmt.executeQuery().use { rs ->
-                while (rs.next()) {
-                    val screeningId = rs.getLong("s_id")
-                    val movie = mapMovie(rs)
-                    val room = mapRoom(rs)
-                    val startTime = rs.getTimestamp("start_time").toLocalDateTime()
+        dataSource.connection.use { connection ->
+            connection.prepareStatement(sql).use { stmt ->
+                stmt.executeQuery().use { rs ->
+                    while (rs.next()) {
+                        val screeningId = rs.getLong("s_id")
+                        val movie = mapMovie(rs)
+                        val room = mapRoom(rs)
+                        val startTime = rs.getTimestamp("start_time").toLocalDateTime()
 
-                    val reservedSeats = findReservedSeats(screeningId)
-                    var seats = room.seats
-                    reservedSeats.forEach { position ->
-                        seats = seats.updateState(position, ReserveState.RESERVED)
-                    }
+                        val reservedSeats = findReservedSeats(connection, screeningId)
+                        var seats = room.seats
+                        reservedSeats.forEach { position ->
+                            seats = seats.updateState(position, ReserveState.RESERVED)
+                        }
 
-                    screenings.add(
-                        Screening(
-                            id = screeningId,
-                            movie = movie,
-                            room = room,
-                            startTime = startTime,
-                            seats = seats
+                        screenings.add(
+                            Screening(
+                                id = screeningId,
+                                movie = movie,
+                                room = room,
+                                startTime = startTime,
+                                seats = seats
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
         return screenings
     }
 
-    private fun findReservedSeats(screeningId: Long): List<SeatPosition> {
+    private fun findReservedSeats(connection: Connection, screeningId: Long): List<SeatPosition> {
         val sql = "SELECT seat_row, seat_column FROM reserved_seats WHERE screening_id = ?"
         val positions = mutableListOf<SeatPosition>()
         

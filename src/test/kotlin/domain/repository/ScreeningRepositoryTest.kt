@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import repository.JdbcConnection
 import repository.ScreeningRepository
+import repository.SimpleDataSource
 import java.sql.Connection
 import java.sql.Timestamp
 
@@ -19,7 +20,7 @@ class ScreeningRepositoryTest {
     @BeforeEach
     fun setUp() {
         connection = JdbcConnection.getConnection()
-        screeningRepository = ScreeningRepository(connection)
+        screeningRepository = ScreeningRepository(SimpleDataSource())
 
         connection.createStatement().use { stmt ->
             stmt.execute("CREATE TABLE IF NOT EXISTS movies (id BIGINT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255), running_time INT, start_date DATE, end_date DATE)")
